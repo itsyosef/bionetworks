@@ -1,0 +1,26 @@
+#Ignore everything
+*
+#Descend into dirs
+!*/
+
+#Add back in .gitignore
+!.gitignore
+
+#Rules
+!/BGCs/notebooks/**
+!operons/SRA/notebooks/**
+!operons/compare_tools/notebooks/**
+!operons/notebooks/**
+
+!BGCs/scripts/**
+!operons/compare_tools/scripts/**
+!operons/SRA/scripts/**
+!operons/scripts/**
+!genome_metadata/scripts/**
+
+#no checkpoints
+.ipynb_checkpoints/
+
+#exclude folders
+test_ggs
+patric_genera

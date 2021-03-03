@@ -1,0 +1,108 @@
+<html>
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis.css" type="text/css" />
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis-network.min.js"> </script>
+<center>
+<h1>None</h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+
+<style type="text/css">
+
+        #mynetwork {
+            width: 100%;
+            height: 750px;
+            background-color: #222222;
+            border: 1px solid lightgray;
+            position: relative;
+            float: left;
+        }
+
+        
+
+        
+
+        
+</style>
+
+</head>
+
+<body>
+<div id = "mynetwork"></div>
+
+
+<script type="text/javascript">
+
+    // initialize global variables.
+    var edges;
+    var nodes;
+    var network; 
+    var container;
+    var options, data;
+
+    
+    // This method is responsible for drawing the graph, returns the drawn network
+    function drawGraph() {
+        var container = document.getElementById('mynetwork');
+        
+        
+
+        // parsing and collecting nodes and edges from the python
+        nodes = new vis.DataSet([{"font": {"color": "white"}, "group": "Illumina HiSeq", "id": "562.7162", "label": "562.7162", "shape": "dot", "size": 10, "title": "Genome: 562.7162\u003cbr\u003eSequencing Platform Illumina HiSeq"}, {"font": {"color": "white"}, "group": "Illumina HiSeq", "id": "562.7512", "label": "562.7512", "shape": "dot", "size": 10, "title": "Genome: 562.7512\u003cbr\u003eSequencing Platform Illumina HiSeq"}, {"font": {"color": "white"}, "group": "Illumina", "id": "562.7843", "label": "562.7843", "shape": "dot", "size": 10, "title": "Genome: 562.7843\u003cbr\u003eSequencing Platform Illumina"}, {"font": {"color": "white"}, "group": "HiSeq", "id": "562.7163", "label": "562.7163", "shape": "dot", "size": 10, "title": "Genome: 562.7163\u003cbr\u003eSequencing Platform HiSeq"}, {"font": {"color": "white"}, "group": "Illumina HiSeq", "id": "562.7561", "label": "562.7561", "shape": "dot", "size": 10, "title": "Genome: 562.7561\u003cbr\u003eSequencing Platform Illumina HiSeq"}, {"font": {"color": "white"}, "group": "Illumina HiSeq", "id": "562.7562", "label": "562.7562", "shape": "dot", "size": 10, "title": "Genome: 562.7562\u003cbr\u003eSequencing Platform Illumina HiSeq"}, {"font": {"color": "white"}, "group": "Illumina HiSeq", "id": "562.7506", "label": "562.7506", "shape": "dot", "size": 10, "title": "Genome: 562.7506\u003cbr\u003eSequencing Platform Illumina HiSeq"}, {"font": {"color": "white"}, "group": "Illumina MiSeq", "id": "562.7115", "label": "562.7115", "shape": "dot", "size": 10, "title": "Genome: 562.7115\u003cbr\u003eSequencing Platform Illumina MiSeq"}, {"font": {"color": "white"}, "group": "Illumina", "id": "562.7508", "label": "562.7508", "shape": "dot", "size": 10, "title": "Genome: 562.7508\u003cbr\u003eSequencing Platform Illumina"}, {"font": {"color": "white"}, "group": "HiSeq", "id": "562.7518", "label": "562.7518", "shape": "dot", "size": 10, "title": "Genome: 562.7518\u003cbr\u003eSequencing Platform HiSeq"}, {"font": {"color": "white"}, "group": "HiSeq", "id": "562.7556", "label": "562.7556", "shape": "dot", "size": 10, "title": "Genome: 562.7556\u003cbr\u003eSequencing Platform HiSeq"}, {"font": {"color": "white"}, "group": "Illumina HiSeq", "id": "562.7549", "label": "562.7549", "shape": "dot", "size": 10, "title": "Genome: 562.7549\u003cbr\u003eSequencing Platform Illumina HiSeq"}, {"font": {"color": "white"}, "group": "Illumina MiSeq", "id": "562.7540", "label": "562.7540", "shape": "dot", "size": 10, "title": "Genome: 562.7540\u003cbr\u003eSequencing Platform Illumina MiSeq"}, {"font": {"color": "white"}, "group": "Illumina", "id": "562.7509", "label": "562.7509", "shape": "dot", "size": 10, "title": "Genome: 562.7509\u003cbr\u003eSequencing Platform Illumina"}, {"font": {"color": "white"}, "group": "HiSeq", "id": "562.8460", "label": "562.8460", "shape": "dot", "size": 10, "title": "Genome: 562.8460\u003cbr\u003eSequencing Platform HiSeq"}, {"font": {"color": "white"}, "group": "Illumina MiSeq", "id": "562.8467", "label": "562.8467", "shape": "dot", "size": 10, "title": "Genome: 562.8467\u003cbr\u003eSequencing Platform Illumina MiSeq"}, {"font": {"color": "white"}, "group": "Illumina HiSeq", "id": "562.7131", "label": "562.7131", "shape": "dot", "size": 10, "title": "Genome: 562.7131\u003cbr\u003eSequencing Platform Illumina HiSeq"}, {"font": {"color": "white"}, "group": "Illumina HiSeq", "id": "562.8465", "label": "562.8465", "shape": "dot", "size": 10, "title": "Genome: 562.8465\u003cbr\u003eSequencing Platform Illumina HiSeq"}, {"font": {"color": "white"}, "group": "Illumina MiSeq", "id": "562.7515", "label": "562.7515", "shape": "dot", "size": 10, "title": "Genome: 562.7515\u003cbr\u003eSequencing Platform Illumina MiSeq"}, {"font": {"color": "white"}, "group": "Illumina", "id": "562.7534", "label": "562.7534", "shape": "dot", "size": 10, "title": "Genome: 562.7534\u003cbr\u003eSequencing Platform Illumina"}, {"font": {"color": "white"}, "group": "Illumina MiSeq", "id": "562.7548", "label": "562.7548", "shape": "dot", "size": 10, "title": "Genome: 562.7548\u003cbr\u003eSequencing Platform Illumina MiSeq"}, {"font": {"color": "white"}, "group": "Illumina MiSeq", "id": "562.7134", "label": "562.7134", "shape": "dot", "size": 10, "title": "Genome: 562.7134\u003cbr\u003eSequencing Platform Illumina MiSeq"}, {"font": {"color": "white"}, "group": "Illumina MiSeq", "id": "562.7169", "label": "562.7169", "shape": "dot", "size": 10, "title": "Genome: 562.7169\u003cbr\u003eSequencing Platform Illumina MiSeq"}, {"font": {"color": "white"}, "group": "Illumina HiSeq", "id": "562.8446", "label": "562.8446", "shape": "dot", "size": 10, "title": "Genome: 562.8446\u003cbr\u003eSequencing Platform Illumina HiSeq"}, {"font": {"color": "white"}, "group": "Illumina", "id": "562.7137", "label": "562.7137", "shape": "dot", "size": 10, "title": "Genome: 562.7137\u003cbr\u003eSequencing Platform Illumina"}, {"font": {"color": "white"}, "group": "Illumina HiSeq", "id": "562.7123", "label": "562.7123", "shape": "dot", "size": 10, "title": "Genome: 562.7123\u003cbr\u003eSequencing Platform Illumina HiSeq"}, {"font": {"color": "white"}, "group": "HiSeq", "id": "562.7537", "label": "562.7537", "shape": "dot", "size": 10, "title": "Genome: 562.7537\u003cbr\u003eSequencing Platform HiSeq"}, {"font": {"color": "white"}, "group": "HiSeq", "id": "562.7530", "label": "562.7530", "shape": "dot", "size": 10, "title": "Genome: 562.7530\u003cbr\u003eSequencing Platform HiSeq"}, {"font": {"color": "white"}, "group": "Illumina", "id": "562.7521", "label": "562.7521", "shape": "dot", "size": 10, "title": "Genome: 562.7521\u003cbr\u003eSequencing Platform Illumina"}, {"font": {"color": "white"}, "group": "Illumina", "id": "562.7143", "label": "562.7143", "shape": "dot", "size": 10, "title": "Genome: 562.7143\u003cbr\u003eSequencing Platform Illumina"}, {"font": {"color": "white"}, "group": "HiSeq", "id": "562.7130", "label": "562.7130", "shape": "dot", "size": 10, "title": "Genome: 562.7130\u003cbr\u003eSequencing Platform HiSeq"}, {"font": {"color": "white"}, "group": "HiSeq", "id": "562.7560", "label": "562.7560", "shape": "dot", "size": 10, "title": "Genome: 562.7560\u003cbr\u003eSequencing Platform HiSeq"}, {"font": {"color": "white"}, "group": "Illumina", "id": "562.7541", "label": "562.7541", "shape": "dot", "size": 10, "title": "Genome: 562.7541\u003cbr\u003eSequencing Platform Illumina"}, {"font": {"color": "white"}, "group": "Illumina HiSeq", "id": "562.8523", "label": "562.8523", "shape": "dot", "size": 10, "title": "Genome: 562.8523\u003cbr\u003eSequencing Platform Illumina HiSeq"}]);
+        edges = new vis.DataSet([{"from": "562.7162", "title": "Dist: 13361.0", "to": "562.7512", "value": 74.839095943721, "weight": 1}, {"from": "562.7162", "title": "Dist: 5.0", "to": "562.7843", "value": 166666.66666666666, "weight": 1}, {"from": "562.7162", "title": "Dist: 2.0", "to": "562.7163", "value": 333333.3333333333, "weight": 1}, {"from": "562.7162", "title": "Dist: 13043.0", "to": "562.7561", "value": 76.66360012266176, "weight": 1}, {"from": "562.7162", "title": "Dist: 12950.0", "to": "562.7562", "value": 77.21411474017451, "weight": 1}, {"from": "562.7162", "title": "Dist: 13438.0", "to": "562.7506", "value": 74.41029838529653, "weight": 1}, {"from": "562.7162", "title": "Dist: 4.0", "to": "562.7115", "value": 200000.0, "weight": 1}, {"from": "562.7162", "title": "Dist: 12048.0", "to": "562.7508", "value": 82.99443937256204, "weight": 1}, {"from": "562.7162", "title": "Dist: 3994.0", "to": "562.7518", "value": 250.31289111389236, "weight": 1}, {"from": "562.7162", "title": "Dist: 13580.0", "to": "562.7556", "value": 73.63228039172373, "weight": 1}, {"from": "562.7162", "title": "Dist: 13347.0", "to": "562.7549", "value": 74.91759065028468, "weight": 1}, {"from": "562.7162", "title": "Dist: 12442.0", "to": "562.7540", "value": 80.36647110825363, "weight": 1}, {"from": "562.7162", "title": "Dist: 13581.0", "to": "562.7509", "value": 73.62685907819173, "weight": 1}, {"from": "562.7512", "title": "Dist: 13362.0", "to": "562.7843", "value": 74.83349547257352, "weight": 1}, {"from": "562.7512", "title": "Dist: 13361.0", "to": "562.7163", "value": 74.839095943721, "weight": 1}, {"from": "562.7512", "title": "Dist: 13769.0", "to": "562.7561", "value": 72.62164124909224, "weight": 1}, {"from": "562.7512", "title": "Dist: 13320.0", "to": "562.7562", "value": 75.06943923128894, "weight": 1}, {"from": "562.7512", "title": "Dist: 12991.0", "to": "562.7506", "value": 76.9704433497537, "weight": 1}, {"from": "562.7512", "title": "Dist: 13361.0", "to": "562.7115", "value": 74.839095943721, "weight": 1}, {"from": "562.7512", "title": "Dist: 12935.0", "to": "562.7508", "value": 77.30364873222015, "weight": 1}, {"from": "562.7512", "title": "Dist: 13669.0", "to": "562.7518", "value": 73.1528895391368, "weight": 1}, {"from": "562.7512", "title": "Dist: 13790.0", "to": "562.7549", "value": 72.51105793633529, "weight": 1}, {"from": "562.7512", "title": "Dist: 13051.0", "to": "562.7540", "value": 76.6166104811523, "weight": 1}, {"from": "562.8460", "title": "Dist: 7.0", "to": "562.8467", "value": 125000.0, "weight": 1}, {"from": "562.8460", "title": "Dist: 0.0", "to": "562.7131", "value": 1000000.0, "weight": 1}, {"from": "562.8460", "title": "Dist: 6.0", "to": "562.8465", "value": 142857.14285714287, "weight": 1}, {"from": "562.7843", "title": "Dist: 5.0", "to": "562.7163", "value": 166666.66666666666, "weight": 1}, {"from": "562.7843", "title": "Dist: 13044.0", "to": "562.7561", "value": 76.65772326561901, "weight": 1}, {"from": "562.7843", "title": "Dist: 12951.0", "to": "562.7562", "value": 77.20815318097591, "weight": 1}, {"from": "562.7843", "title": "Dist: 13439.0", "to": "562.7506", "value": 74.4047619047619, "weight": 1}, {"from": "562.7843", "title": "Dist: 1.0", "to": "562.7115", "value": 500000.0, "weight": 1}, {"from": "562.7843", "title": "Dist: 12049.0", "to": "562.7508", "value": 82.98755186721992, "weight": 1}, {"from": "562.7843", "title": "Dist: 3995.0", "to": "562.7518", "value": 250.25025025025025, "weight": 1}, {"from": "562.7843", "title": "Dist: 13581.0", "to": "562.7556", "value": 73.62685907819173, "weight": 1}, {"from": "562.7843", "title": "Dist: 13348.0", "to": "562.7549", "value": 74.91197842535021, "weight": 1}, {"from": "562.7843", "title": "Dist: 12443.0", "to": "562.7540", "value": 80.36001285760206, "weight": 1}, {"from": "562.7843", "title": "Dist: 13582.0", "to": "562.7509", "value": 73.62143856290952, "weight": 1}, {"from": "562.7515", "title": "Dist: 13872.0", "to": "562.7534", "value": 72.08246233691342, "weight": 1}, {"from": "562.7515", "title": "Dist: 0.0", "to": "562.7548", "value": 1000000.0, "weight": 1}, {"from": "562.8467", "title": "Dist: 7.0", "to": "562.7131", "value": 125000.0, "weight": 1}, {"from": "562.8467", "title": "Dist: 1.0", "to": "562.8465", "value": 500000.0, "weight": 1}, {"from": "562.7134", "title": "Dist: 9.0", "to": "562.7169", "value": 100000.0, "weight": 1}, {"from": "562.7134", "title": "Dist: 4.0", "to": "562.8446", "value": 200000.0, "weight": 1}, {"from": "562.7134", "title": "Dist: 9.0", "to": "562.7137", "value": 100000.0, "weight": 1}, {"from": "562.7163", "title": "Dist: 13043.0", "to": "562.7561", "value": 76.66360012266176, "weight": 1}, {"from": "562.7163", "title": "Dist: 12950.0", "to": "562.7562", "value": 77.21411474017451, "weight": 1}, {"from": "562.7163", "title": "Dist: 13438.0", "to": "562.7506", "value": 74.41029838529653, "weight": 1}, {"from": "562.7163", "title": "Dist: 4.0", "to": "562.7115", "value": 200000.0, "weight": 1}, {"from": "562.7163", "title": "Dist: 12048.0", "to": "562.7508", "value": 82.99443937256204, "weight": 1}, {"from": "562.7163", "title": "Dist: 3994.0", "to": "562.7518", "value": 250.31289111389236, "weight": 1}, {"from": "562.7163", "title": "Dist: 13580.0", "to": "562.7556", "value": 73.63228039172373, "weight": 1}, {"from": "562.7163", "title": "Dist: 13347.0", "to": "562.7549", "value": 74.91759065028468, "weight": 1}, {"from": "562.7163", "title": "Dist: 12442.0", "to": "562.7540", "value": 80.36647110825363, "weight": 1}, {"from": "562.7163", "title": "Dist: 13581.0", "to": "562.7509", "value": 73.62685907819173, "weight": 1}, {"from": "562.7123", "title": "Dist: 9987.0", "to": "562.7537", "value": 100.1201441730076, "weight": 1}, {"from": "562.7123", "title": "Dist: 3535.0", "to": "562.7534", "value": 282.80542986425337, "weight": 1}, {"from": "562.7530", "title": "Dist: 3.0", "to": "562.7521", "value": 250000.0, "weight": 1}, {"from": "562.7537", "title": "Dist: 9519.0", "to": "562.7534", "value": 105.04201680672269, "weight": 1}, {"from": "562.7561", "title": "Dist: 13084.0", "to": "562.7562", "value": 76.42338555598013, "weight": 1}, {"from": "562.7561", "title": "Dist: 13332.0", "to": "562.7506", "value": 75.00187504687617, "weight": 1}, {"from": "562.7561", "title": "Dist: 13043.0", "to": "562.7115", "value": 76.66360012266176, "weight": 1}, {"from": "562.7561", "title": "Dist: 13021.0", "to": "562.7508", "value": 76.79311933650744, "weight": 1}, {"from": "562.7561", "title": "Dist: 13109.0", "to": "562.7518", "value": 76.27765064836004, "weight": 1}, {"from": "562.7561", "title": "Dist: 13656.0", "to": "562.7549", "value": 73.22252324815113, "weight": 1}, {"from": "562.7561", "title": "Dist: 13405.0", "to": "562.7540", "value": 74.59346561241236, "weight": 1}, {"from": "562.7143", "title": "Dist: 0.0", "to": "562.7130", "value": 1000000.0, "weight": 1}, {"from": "562.7131", "title": "Dist: 6.0", "to": "562.8465", "value": 142857.14285714287, "weight": 1}, {"from": "562.7562", "title": "Dist: 12500.0", "to": "562.7506", "value": 79.99360051195904, "weight": 1}, {"from": "562.7562", "title": "Dist: 12950.0", "to": "562.7115", "value": 77.21411474017451, "weight": 1}, {"from": "562.7562", "title": "Dist: 9156.0", "to": "562.7508", "value": 109.20607185759528, "weight": 1}, {"from": "562.7562", "title": "Dist: 12800.0", "to": "562.7518", "value": 78.11889696117491, "weight": 1}, {"from": "562.7562", "title": "Dist: 13857.0", "to": "562.7556", "value": 72.16048491845865, "weight": 1}, {"from": "562.7562", "title": "Dist: 11526.0", "to": "562.7549", "value": 86.75284115554784, "weight": 1}, {"from": "562.7562", "title": "Dist: 11704.0", "to": "562.7540", "value": 85.43357539513029, "weight": 1}, {"from": "562.7562", "title": "Dist: 13858.0", "to": "562.7509", "value": 72.1552781585973, "weight": 1}, {"from": "562.7506", "title": "Dist: 13438.0", "to": "562.7115", "value": 74.41029838529653, "weight": 1}, {"from": "562.7506", "title": "Dist: 12528.0", "to": "562.7508", "value": 79.81482959533881, "weight": 1}, {"from": "562.7506", "title": "Dist: 13107.0", "to": "562.7518", "value": 76.28928898382667, "weight": 1}, {"from": "562.7506", "title": "Dist: 13914.0", "to": "562.7556", "value": 71.86489399928135, "weight": 1}, {"from": "562.7506", "title": "Dist: 13314.0", "to": "562.7549", "value": 75.10326699211416, "weight": 1}, {"from": "562.7506", "title": "Dist: 13485.0", "to": "562.7540", "value": 74.15097137772504, "weight": 1}, {"from": "562.7506", "title": "Dist: 13915.0", "to": "562.7509", "value": 71.85972980741593, "weight": 1}, {"from": "562.7115", "title": "Dist: 12048.0", "to": "562.7508", "value": 82.99443937256204, "weight": 1}, {"from": "562.7115", "title": "Dist: 3994.0", "to": "562.7518", "value": 250.31289111389236, "weight": 1}, {"from": "562.7115", "title": "Dist: 13580.0", "to": "562.7556", "value": 73.63228039172373, "weight": 1}, {"from": "562.7115", "title": "Dist: 13347.0", "to": "562.7549", "value": 74.91759065028468, "weight": 1}, {"from": "562.7115", "title": "Dist: 12442.0", "to": "562.7540", "value": 80.36647110825363, "weight": 1}, {"from": "562.7115", "title": "Dist: 13581.0", "to": "562.7509", "value": 73.62685907819173, "weight": 1}, {"from": "562.7169", "title": "Dist: 9.0", "to": "562.8446", "value": 100000.0, "weight": 1}, {"from": "562.7169", "title": "Dist: 6.0", "to": "562.7137", "value": 142857.14285714287, "weight": 1}, {"from": "562.7508", "title": "Dist: 12097.0", "to": "562.7518", "value": 82.65829062654984, "weight": 1}, {"from": "562.7508", "title": "Dist: 13787.0", "to": "562.7556", "value": 72.5268349289237, "weight": 1}, {"from": "562.7508", "title": "Dist: 12300.0", "to": "562.7549", "value": 81.29420372327453, "weight": 1}, {"from": "562.7508", "title": "Dist: 11764.0", "to": "562.7540", "value": 84.99787505312368, "weight": 1}, {"from": "562.7508", "title": "Dist: 13788.0", "to": "562.7509", "value": 72.52157516861266, "weight": 1}, {"from": "562.8446", "title": "Dist: 9.0", "to": "562.7137", "value": 100000.0, "weight": 1}, {"from": "562.7534", "title": "Dist: 13872.0", "to": "562.7548", "value": 72.08246233691342, "weight": 1}, {"from": "562.7518", "title": "Dist: 13318.0", "to": "562.7556", "value": 75.08071176514753, "weight": 1}, {"from": "562.7518", "title": "Dist: 13465.0", "to": "562.7549", "value": 74.2611020347542, "weight": 1}, {"from": "562.7518", "title": "Dist: 12310.0", "to": "562.7540", "value": 81.22816992933149, "weight": 1}, {"from": "562.7518", "title": "Dist: 13319.0", "to": "562.7509", "value": 75.07507507507508, "weight": 1}, {"from": "562.7556", "title": "Dist: 9113.0", "to": "562.7549", "value": 109.7213078779899, "weight": 1}, {"from": "562.7556", "title": "Dist: 1.0", "to": "562.7509", "value": 500000.0, "weight": 1}, {"from": "562.7549", "title": "Dist: 13234.0", "to": "562.7540", "value": 75.55723460521345, "weight": 1}, {"from": "562.7549", "title": "Dist: 9114.0", "to": "562.7509", "value": 109.70927043335162, "weight": 1}]);
+
+        // adding nodes and edges to the graph
+        data = {nodes: nodes, edges: edges};
+
+        var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": false,
+            "type": "continuous"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+        
+        
+
+        
+
+        network = new vis.Network(container, data, options);
+
+        
+
+
+        
+
+        return network;
+
+    }
+
+    drawGraph();
+
+</script>
+</body>
+</html>
