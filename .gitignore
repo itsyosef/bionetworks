@@ -22,5 +22,6 @@
 .ipynb_checkpoints/
 
 #exclude folders
-test_ggs
-patric_genera
+test_ggs/
+patric_genera/
+async/

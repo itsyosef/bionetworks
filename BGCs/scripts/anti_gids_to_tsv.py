@@ -1,10 +1,44 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # coding: utf-8
 
 import networkx as nx
 import json
 from Bio import SeqIO
 import sys
+import pandas as pd
+import random
+import numpy as np
+import subprocess
+import requests
+
+def get_splits(k_split, num_splits=5, top_k = 100):
+
+    smash = pd.read_csv("../misc_data/antismash_db_results.csv", sep="\t")
+    top_k_accessions = smash["NCBI accession"].value_counts()[:top_k].index
+    # above_10_index = counts[counts > 5].index
+    smash = smash[smash["NCBI accession"].isin(top_k_accessions)]
+    smash["NCBI accession"] = smash["NCBI accession"].apply(lambda row: row.split(".")[0])
+    smash_dict = dict()
+    for accession, df in smash.groupby("NCBI accession"):
+        smash_dict[accession] = df[["From", "To"]].to_numpy()
+    smash_nums = sorted([(k, len(value)) for k, value in smash_dict.items()], key = lambda tup: tup[1], reverse=True)
+    random.seed(42)
+    random.shuffle(smash_nums)
+    splits = [[] for i in range(num_splits)]
+    for ix, tup in enumerate(smash_nums):
+        split = ix % num_splits
+        splits[split].append(tup[0])
+
+    test = splits.pop(k_split)
+    train = [i for s in splits for i in s]
+    
+    test = subprocess.run(["../scripts/genome_accession_to_patric_genome_ids.sh"] + test, capture_output=True).stdout.decode("utf-8").split("\n")
+    test = [i for i in test if i != ""]
+    
+    train = subprocess.run(["../scripts/genome_accession_to_patric_genome_ids.sh"] + train, capture_output=True).stdout.decode("utf-8").split("\n")
+    train = [i for i in train if i != ""]
+    
+    return train, test
 
 def chunker(data, chunk_size):
     for i in range(0, len(data), chunk_size):
@@ -70,13 +104,19 @@ def gen_pfam_graph_input(source, destination):
                         dest.write(("\t".join(pfam_line)))
 
 
-oufile = sys.argv[1]
-gids = sys.argv[2:]
+outprefix = sys.argv[1]
+splits = sys.argv[2:]
                         
 records = [r for r in SeqIO.parse("/sfs/lustre/bahamut/scratch/jho5ze/bionets/BGCs/genera/Mycobacterium/jsonhfasta/2021-02-24.jsonhfasta", "fasta")]
 seq_dict = [json.loads(r.description.split(None, 1)[-1]) for r in records]
 seq_dict = {x["md5"]:sorted([i for i in x.setdefault("sequence_domain", [{"source":"none", "start":"0"}]) if i["source"] == "pfam"], key = lambda x: int(x["start"])) for x in seq_dict}
+# seq_dict = {"md5":[{"sequence_domain":"pfam", "source":"none", "start":"0", "end":"0"}]}
 
-tsv_from_genome_ids(outprefix + ".tsv", gids)
-gen_pfam_graph_input(outprefix + ".tsv", outprefix + "_with_pfams.tsv")
+for split in splits:
+    split = int(split)
+    train, test = get_splits(split)
+    tsv_from_genome_ids(outprefix + f"_split_{split}_train.tsv", train)
+    tsv_from_genome_ids(outprefix + f"_split_{split}_test.tsv", test)
+    gen_pfam_graph_input(outprefix + f"_split_{split}_train.tsv", outprefix + f"_split_{split}_train_with_pfams.tsv")
+    gen_pfam_graph_input(outprefix + f"_split_{split}_test.tsv", outprefix + f"_split_{split}_test_with_pfams.tsv")
 
