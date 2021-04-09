@@ -1,0 +1,2 @@
+rg Houston metadata_2021_04_08.tsv  | rg Texas | rg -v County | cut -f 1 | less
+rg TX-HMH- -A 1 sequences.fasta > Houston_sequences.fasta

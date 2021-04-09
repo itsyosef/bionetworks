@@ -11,12 +11,14 @@
 !operons/SRA/notebooks/**
 !operons/compare_tools/notebooks/**
 !operons/notebooks/**
+!covid/notebooks/**
 
 !BGCs/scripts/**
 !operons/compare_tools/scripts/**
 !operons/SRA/scripts/**
 !operons/scripts/**
 !genome_metadata/scripts/**
+!covid/scripts/**
 
 #no checkpoints
 .ipynb_checkpoints/
