@@ -2,7 +2,7 @@
 
 #SBATCH -A nssac_students
 #SBATCH -p bii
-#SBATCH -t 00:20:00
+#SBATCH -t 10:30:00
 #SBATCH --output=/sfs/lustre/bahamut/scratch/jho5ze/bionets/covid/logs/pipeline_slurm-%A.out
 #SBATCH --error=/sfs/lustre/bahamut/scratch/jho5ze/bionets/covid/logs/pipeline_slurm-%A.out
 #SBATCH --cpus-per-task=1
