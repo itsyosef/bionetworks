@@ -6,6 +6,11 @@ from pathlib import Path
 from matplotlib import pyplot as plt
 from copy import deepcopy
 from tqdm import tqdm
+from screed import ScreedDB
+import re
+from Bio.Seq import Seq
+
+msadb = ScreedDB("../data/msa_0408/usa_msa_0408.fasta")
 
 def expand_ggraph(ggraph):
     """
@@ -174,15 +179,76 @@ def msa_from_seq_paths(seq_paths):
             for line in src.readlines():
                 yield line
                 
+def msa_from_screed_ids(ids): 
+    for seq_id in ids:
+        record = msadb[seq_id]
+        name = ">"+record["name"]
+        sequence = str(record["sequence"])
+        yield name
+        yield sequence
+
 def msa_from_string(msas):
     for line in msas.split("\n"):
         if line.strip() != "":
             yield line
+            
+def match_line_to_reference(line):
+    with open("/scratch/jho5ze/bionets/covid/data/msa_0408/reference_msa.txt") as src:
+        reference_line = src.readlines()[0]
+    processed_line = ""
+    for ix, char in enumerate(line):
+        if reference_line[ix] != "-":
+            processed_line += char
+    return processed_line
+
+def translate_line(line):
+    get_dash = re.compile("-+")
+    dashes = get_dash.findall(line)
+    if dashes and min([len(i)%3 == 0 for i in dashes]) == False: #Some dash stretch is not divisible by 3
+        return ""
+    else:
+        dashes.append("") #so we don't run out of next "-" stretches in the loop below
+        aa_line = ""
+        if line[0] == "-":
+            aa_line += "-" * (len(dashes[0])//3)
+            dashes.pop(0)
+        for ix, nas in enumerate([i for i in get_dash.split(line) if i != ""]):
+            aa_line += str(Seq(nas).translate())
+            aa_line += "-" * (len(dashes[ix])//3)
+        return aa_line
+    
+def translate_record(record):
+    orfs = [(29558, 29674), \
+            (28274, 29533), \
+            (27894, 28259), \
+            (27756, 27887), \
+            (27394, 27759), \
+            (27202, 27387), \
+            (26523, 27191), \
+            (26245, 26472), \
+            (25393, 26220), \
+            (21563, 25384), \
+            (13468, 21555), \
+            (266, 13483)]
+    aa_seqs = []
+    if type(record) == str:
+        record_seq = match_line_to_reference(record)
+    else:
+        record_seq = match_line_to_reference(str(record["sequence"]))
+    for start, stop in orfs:
+        start -= 1 #1 based indexing from the preprocessing of orfs (from the GFF file)
+        segment = record_seq[start:stop]
+        aa_seqs.append(translate_line(segment))
+    return "".join(aa_seqs)
         
-def generate_nx_from_msa(msa):
+def generate_nx_from_msa(msa, accepted_letters=None, screed_ids=True, aa_level=False):
     genome_len = 34742 #54
     genomes = []
-    accepted_letters = ["A","T","C","G"]
+    if accepted_letters is None:
+        if aa_level:
+            accepted_letters = [char for char in "ARNDCQEGHILKMFPSTWYVUOXBZJ*"]
+        else:
+            accepted_letters = ["A","T","C","G"]
     
     #Initialize the graph
     graph = nx.DiGraph()
@@ -190,10 +256,13 @@ def generate_nx_from_msa(msa):
         for letter in accepted_letters: 
             graph.add_node(f"{ix}_{letter}", genomes=[], sequence=letter, num_genomes=0)
             
-    if type(msa) == list:
-        msa_yield = msa_from_seq_paths
-    else: #type is str
+    if type(msa) == str:
         msa_yield = msa_from_string
+    else: #Type is iterable
+        if screed_ids:
+            msa_yield = msa_from_screed_ids
+        else:
+            msa_yield = msa_from_seq_paths
 
     edges = dict()
     for line in msa_yield(msa):
@@ -204,7 +273,8 @@ def generate_nx_from_msa(msa):
                 genome = genome.split("/")[2]
             genomes.append(genome)
         else:
-
+            if aa_level:
+                line = translate_record(line)
             prev_node = None
             for ix, char in enumerate(line): 
                 if char not in accepted_letters: #Treats all other letters as a dash (and a dash like a dash)

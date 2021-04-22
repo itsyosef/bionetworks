@@ -18,16 +18,24 @@ graph, genomes = eu.generate_nx_from_msa(seq_paths)
 eu.add_root(graph, genomes)
 collapsed_graph = eu.collapse_graph(graph)
 
+aa_graph, aa_genomes = eu.generate_nx_from_msa(seq_paths, aa_level=True)
+eu.add_root(aa_graph, aa_genomes)
+aa_collapsed_graph = eu.collapse_graph(aa_graph)
+
 eu.annotate_graph(graph)
+eu.annotate_graph(aa_graph)
 eu.annotate_graph(collapsed_graph)
+eu.annotate_graph(aa_collapsed_graph)
 
 graph_presence_info = eu.get_genome_node_presence(graph, genomes)
 collapsed_graph_presence_info = eu.get_genome_node_presence(collapsed_graph, genomes)
+aa_graph_presence_info = eu.get_genome_node_presence(aa_graph, aa_genomes)
+aa_collapsed_graph_presence_info = eu.get_genome_node_presence(aa_collapsed_graph, aa_genomes)
 
 columns = []
 values = [] 
 
-for G, graph_name, presence_info in zip([graph, collapsed_graph], ["full", "collapsed"], [graph_presence_info, collapsed_graph_presence_info]):
+for G, graph_name, presence_info in zip([graph, collapsed_graph, aa_graph, aa_collapsed_graph], ["full", "collapsed", "aa_full", "aa_collapsed"], [graph_presence_info, collapsed_graph_presence_info, aa_graph_presence_info, aa_collapsed_graph_presence_info]):
     for seqs in range(2):
         seq_name = f"_sequences_{seqs}"
         for genomes in range(2):
