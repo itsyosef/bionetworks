@@ -181,11 +181,12 @@ def msa_from_seq_paths(seq_paths):
                 
 def msa_from_screed_ids(ids): 
     for seq_id in ids:
-        record = msadb[seq_id]
-        name = ">"+record["name"]
-        sequence = str(record["sequence"])
-        yield name
-        yield sequence
+        if seq_id in msadb:
+            record = msadb[seq_id]
+            name = ">"+record["name"]
+            sequence = str(record["sequence"])
+            yield name
+            yield sequence
 
 def msa_from_string(msas):
     for line in msas.split("\n"):
