@@ -202,11 +202,13 @@ def match_line_to_reference(line):
             processed_line += char
     return processed_line
 
-def translate_line(line):
+def translate_line(line, start, stop):
+    num_aas = int((stop - start)/3)
     get_dash = re.compile("-+")
     dashes = get_dash.findall(line)
+    stop_codons = 0
     if dashes and min([len(i)%3 == 0 for i in dashes]) == False: #Some dash stretch is not divisible by 3
-        return ""
+        return "-" * num_aas
     else:
         dashes.append("") #so we don't run out of next "-" stretches in the loop below
         aa_line = ""
@@ -214,9 +216,18 @@ def translate_line(line):
             aa_line += "-" * (len(dashes[0])//3)
             dashes.pop(0)
         for ix, nas in enumerate([i for i in get_dash.split(line) if i != ""]):
-            aa_line += str(Seq(nas).translate())
+            translated_segment = str(Seq(nas).translate())
+            aa_line += translated_segment
             aa_line += "-" * (len(dashes[ix])//3)
-        return aa_line
+            stop_codons += translated_segment.count("*")
+            if stop_codons > 1:
+                break
+        if stop_codons > 1:
+            return "-" * num_aas
+        else:
+            if len(aa_line) != num_aas:
+                print(aa_line)
+            return aa_line
     
 def translate_record(record):
     orfs = [(29558, 29674), \
@@ -239,7 +250,7 @@ def translate_record(record):
     for start, stop in orfs:
         start -= 1 #1 based indexing from the preprocessing of orfs (from the GFF file)
         segment = record_seq[start:stop]
-        aa_seqs.append(translate_line(segment))
+        aa_seqs.append(translate_line(segment, start, stop))
     return "".join(aa_seqs)
         
 def generate_nx_from_msa(msa, accepted_letters=None, screed_ids=True, aa_level=False):
@@ -276,6 +287,9 @@ def generate_nx_from_msa(msa, accepted_letters=None, screed_ids=True, aa_level=F
         else:
             if aa_level:
                 line = translate_record(line)
+                if len(line) != 9760:
+                    print("Line is weird length: ", genome)
+                    print(len(line))
             prev_node = None
             for ix, char in enumerate(line): 
                 if char not in accepted_letters: #Treats all other letters as a dash (and a dash like a dash)

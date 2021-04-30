@@ -51,15 +51,17 @@ for G, graph_name, presence_info in iter_info:
     for seqs in range(2):
         seq_name = f"_sequences_{seqs}"
         for genomes in range(2):
-            if graph_name == "full":
+            if "full" in graph_name:
                 if not (seqs ^ genomes):#full_both and full_none reduce to full_genomes and full_seq, respectively
                     continue
             genome_name = f"_genomes_{genomes}"
             columns.append(graph_name + seq_name + genome_name)
             uncert = str(eu.calc_uncertainty(G, presence_info, weigh_on_sequence=seqs, weigh_on_genomes=genomes))
             values.append(uncert)
+            print()
             print("Done with: ", graph_name + seq_name + genome_name, ": ", uncert)
-
+            print()
+            
 graph_name = str(graph_out_path).split("/")[-1]
 graph_path = graph_out_path / (graph_name + ".gpkl")
 if not is_houston:
