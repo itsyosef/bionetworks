@@ -147,8 +147,8 @@ def calc_uncertainty(ggraph, graph_presence_info, weigh_on_sequence=True, weigh_
     
     terms = dict()
     
-#     for x_node in ggraph.nodes():
-    for x_node in tqdm(ggraph.nodes()):
+    for x_node in ggraph.nodes():
+#     for x_node in tqdm(ggraph.nodes()):
         
         #uninduced nodes
         genome_ixs = [sorted_genome_dict[g] for g in ggraph.nodes[x_node]["genomes"]]
