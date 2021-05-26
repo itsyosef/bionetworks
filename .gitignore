@@ -13,6 +13,12 @@
 !operons/notebooks/**
 !covid/notebooks/**
 
+BGCs/notebooks/output
+operons/SRA/notebooks/output
+operons/compare_tools/notebooks/output
+operons/notebooks/output
+covid/notebooks/output
+
 !BGCs/scripts/**
 !operons/compare_tools/scripts/**
 !operons/SRA/scripts/**
