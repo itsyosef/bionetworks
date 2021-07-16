@@ -5,7 +5,7 @@ import sys
 sys.path.append('/scratch/jho5ze/bionets/covid/scripts')
 import entropy_utils as eu
 from screed import ScreedDB
-msadb = ScreedDB("../data/msa_0408/usa_msa_0408.fasta")
+msadb = ScreedDB("../data/msa_0625/usa_msa_0625.fasta")
 
 def map_chars(line):
     char_map = {"A":0, "C":1, "T":2, "G":3}
