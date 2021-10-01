@@ -12,6 +12,7 @@
 !operons/compare_tools/notebooks/**
 !operons/notebooks/**
 !covid/notebooks/**
+!coevolution/notebooks/**
 
 BGCs/notebooks/output
 operons/SRA/notebooks/output
@@ -25,6 +26,7 @@ covid/notebooks/output
 !operons/scripts/**
 !genome_metadata/scripts/**
 !covid/scripts/**
+!coevolution/scripts/**
 
 #no checkpoints
 .ipynb_checkpoints/
@@ -33,3 +35,6 @@ covid/notebooks/output
 test_ggs/
 patric_genera/
 async/
+
+#no singularity images
+*.sif
