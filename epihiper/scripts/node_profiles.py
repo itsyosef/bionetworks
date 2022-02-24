@@ -54,9 +54,9 @@ for i in range(60):
         nodes_v2 = data_v2[data_v2.exit_state.isin(["var2Isymp", "var2Iasymp", 'var2var1Isymp', 'var2var1Iasymp'])].pid.unique()    
         nodes_v2_re = data_v2[data_v2.exit_state.isin(['var2var1Isymp', 'var2var1Iasymp'])].pid.unique()    
         
-        replicate_data_v1[cutoff].append(nodes_v1)
-        replicate_data_v2[cutoff].append(nodes_v2)
-        replicate_data_v2_re[cutoff].append(nodes_v2)
+        replicate_data_v1[cutoff].append([f"rep_{i+1}"] + list(nodes_v1))
+        replicate_data_v2[cutoff].append([f"rep_{i+1}"] + list(nodes_v2))
+        replicate_data_v2_re[cutoff].append([f"rep_{i+1}"] + list(nodes_v2_re))
         
         rep_date_prevs.append((1, scenario, i+1, cutoff, v1_tick, v1_prev))
         rep_date_prevs.append((2, scenario, i+1, cutoff, v2_tick, v2_prev))
