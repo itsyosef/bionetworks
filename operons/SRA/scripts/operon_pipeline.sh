@@ -7,17 +7,19 @@
 
 module load singularity anaconda parallel
 module load gcc bwa/0.7.17 samtools
-source activate operon
+# source activate operon
 
 set -e
 
 get_reftp () {
+    echo "Getting reFTP"
     grep -P "\t$1" /scratch/jho5ze/bionets/operons/assembly_summary_refseq.txt | cut -f 6,20 | head -n 1
     exit $?
 }
 
 #Grabs the patric id associated with the taxon id from the SRA result. Takes the patric genome id with the smallest number after the period for consistency...
 get_patric_id () {
+    echo "Getting patric ID"
     grep -P "^$1.[0-9]*\t" /sfs/lustre/bahamut/scratch/jho5ze/bionets/operons/patric_genome_metadata.txt | cut -f 1 | sort -u | head -n 1
 }
 
@@ -28,7 +30,7 @@ genera=($(ls genera/))
 if [ -z "$SLURM_ARRAY_TASK_ID" ]; then
     SLURM_ARRAY_TASK_ID=0
 fi
-genus=${genera[$SLURM_ARRAY_TASK_ID]}
+genus=Escherichia #${genera[$SLURM_ARRAY_TASK_ID]}
 
 info_file=/scratch/jho5ze/bionets/operons/SRA/genera/${genus}/${genus}_query_info.csv
 annogesic="singularity exec /scratch/jho5ze/bionets/operons/SRA/annogesic_latest.sif annogesic"
@@ -50,6 +52,7 @@ for (( j=0; j<${#projects[@]}; j++)) do
     for (( i=0; i<${#orgs[@]}; i++)) do 
         cd /scratch/jho5ze/bionets/operons/SRA
         org=${orgs[$i]}
+        echo $org
         #To make sure that the taxon id is actually present in the list of refseq genomes (sometimes the pysradb results include mixed populations with taxids not represented in the refseq dir (or in any single reference), see query "Escherichia RNA-Seq" first 300 results)
 #         echo $org
 #         echo $project
@@ -62,6 +65,7 @@ for (( j=0; j<${#projects[@]}; j++)) do
         fi
         echo "Getting line:"
         grep -P "^$org.[0-9]*\t" /sfs/lustre/bahamut/scratch/jho5ze/bionets/operons/patric_genome_metadata.txt | head -n 1
+        
     #     read genome_accession ftp_path <<<$(get_reftp "$org")
         genome_accession=$(get_patric_id "$org")
         echo "$path/$genome_accession"

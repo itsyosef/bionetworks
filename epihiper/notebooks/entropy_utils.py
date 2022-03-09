@@ -10,7 +10,7 @@ from screed import ScreedDB
 import re
 from Bio.Seq import Seq
 
-msadb = ScreedDB("/sfs/lustre/bahamut/scratch/jho5ze/bionets/coevolution/data/msa_0927/usa_msa_0927.fasta")
+msadb = ScreedDB("/sfs/lustre/bahamut/scratch/jho5ze/bionets/coevolution/data/msa_0129/all_usa_msa_0129.fasta_screed")
 
 def expand_ggraph(ggraph):
     """

@@ -42,6 +42,8 @@ operons/scripts/coli
 *.tree
 *.msa
 *.out
+*.sqlite
+
 __pycache__/
 
 #no checkpoints
