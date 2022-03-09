@@ -13,6 +13,7 @@
 !operons/notebooks/**
 !covid/notebooks/**
 !coevolution/notebooks/**
+!epihiper/notebooks/**
 
 BGCs/notebooks/output
 operons/SRA/notebooks/output
@@ -27,6 +28,21 @@ covid/notebooks/output
 !genome_metadata/scripts/**
 !covid/scripts/**
 !coevolution/scripts/**
+!epihiper/scripts/**
+
+epihiper/scripts/logs
+epihiper/notebooks/archive
+epihiper/notebooks/msas
+
+operons/scripts/coli
+
+*.html
+*.csv
+*.png
+*.tree
+*.msa
+*.out
+__pycache__/
 
 #no checkpoints
 .ipynb_checkpoints/
