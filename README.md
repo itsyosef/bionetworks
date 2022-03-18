@@ -1,6 +1,6 @@
 # Project Notes
 
-**Should be able to access these files on Rivanna
+**Should be able to access these files on Rivanna at /project/biocomplexity/jho5ze
 
 ## BGCs
 
